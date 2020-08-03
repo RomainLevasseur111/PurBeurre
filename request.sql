@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS pur_beurre;
+CREATE DATABASE pur_beurre CHARACTER SET 'utf8';
+USE pur_beurre;
+
 CREATE TABLE categories (
   idcategory INT NOT NULL AUTO_INCREMENT UNIQUE,
   categoryname VARCHAR(100) NOT NULL UNIQUE,
@@ -17,7 +21,7 @@ CREATE TABLE products (
   store VARCHAR(200),
   barcode INT NOT NULL UNIQUE,
   nutritiongrade VARCHAR(1),
-  bio VARCHAR(3),
+  bio TINYINT,
   PRIMARY KEY (idproduct)
 );
 

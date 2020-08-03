@@ -1,4 +1,5 @@
 import pymysql.cursors
+from execsqlfile import *
 
 connection = pymysql.connect(host='localhost',
                              user='user',
@@ -9,8 +10,7 @@ connection = pymysql.connect(host='localhost',
 
 try :
     with connection.cursor() as cursor:
-        sql = "CREATE TABLE categoryproduct (idcategory INT NOT NULL, idproduct INT NOT NULL);"
-        cursor.execute(sql)
+        execsqlfile(cursor, 'request.sql')
     connection.commit()
 
 finally :
