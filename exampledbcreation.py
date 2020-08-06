@@ -1,17 +1,19 @@
-import pymysql.cursors
-from execsqlfile import *
+import mysql.connector
 
-connection = pymysql.connect(host='localhost',
+connection = mysql.connector.connect(host='host',
                              user='user',
-                             password='password',
-                             db='database_name',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+                             password='password')
 
-try :
-    with connection.cursor() as cursor:
-        execsqlfile(cursor, 'request.sql')
+mycursor = connection.cursor()
+def execsqlfile(cursor, sql_file):
+    statement = ""
+    for line in open(sql_file):
+        if line.strip().endswith(';') :
+            statement = statement + line
+            cursor.execute(statement)
+            statement = ""
+        else :
+            statement = statement + line
     connection.commit()
-
-finally :
-    connection.close()
+    mycursor.close()
+execsqlfile(mycursor, 'db.sql')
