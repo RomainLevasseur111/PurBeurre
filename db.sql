@@ -16,10 +16,10 @@ CREATE TABLE categoryproduct (
 CREATE TABLE products (
   idproduct INT NOT NULL AUTO_INCREMENT UNIQUE,
   productname VARCHAR(200) NOT NULL,
-  description VARCHAR(800) NOT NULL,
-  offlink VARCHAR(1000) NOT NULL,
+  description VARCHAR(800),
+  offlink VARCHAR(1000),
   store VARCHAR(200),
-  barcode INT NOT NULL UNIQUE,
+  barcode VARCHAR(100) NOT NULL UNIQUE,
   nutritiongrade VARCHAR(1),
   bio TINYINT,
   PRIMARY KEY (idproduct)

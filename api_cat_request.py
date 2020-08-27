@@ -11,18 +11,16 @@ def requestcat():
 
     response = requests.request("GET", url, headers = headers, data = payload)
     json_cat = response.json()
-    tags_cat = json_cat.get('tags')
-    name_cat = [data.get('name') for data in tags_cat]
-    sql = "INSERT INTO categories (categoryname) VALUES (%s)"
-    i = 2
-    connection = mysql.connector.connect(host='localhost',
-                                         user='OCP5',
-                                         password='password',
+    tags_cat = json_cat.get('tags')[:NB_CATEGORY]
+    name_cat = [(data.get('name'),) for data in tags_cat]
+    sql = "INSERT IGNORE INTO categories (categoryname) VALUES (%s)"
+    connection = mysql.connector.connect(host=HOST,
+                                         user=USER,
+                                         password=PASSWORD,
                                          database='pur_beurre')
-    while i < (NB_CATEGORY + 2) :
-        mycursor = connection.cursor()
-        mycursor.execute(sql, name_cat)
-        connection.commit()
-        mycursor.close()
-        i = i + 1
+    mycursor = connection.cursor()
+    mycursor.executemany(sql, name_cat)
+    connection.commit()
+    mycursor.close()
+
 requestcat()

@@ -1,8 +1,16 @@
 import mysql.connector
-from classes.dbconnect import Dbconnect
 import requests
 import json
 import constants as constants
 
-connect_to_db = Dbconnect(constants.HOST, constants.USER, constants.PASSWORD, 'pur_beurre')
-connect_to_db.connect()
+
+"""
+lance le programme
+essaie de se connecter à la bdd
+si inexistante : dbcreation.py puis se connecte
+api_cat_request.py
+recupérer nom de cat pour ensuite donner un lien permettant de recuperer les
+aliments dans cette categorie
+boucle api_prod_request.py pour les NB_PRODUCT de chaque categorie
+
+"""

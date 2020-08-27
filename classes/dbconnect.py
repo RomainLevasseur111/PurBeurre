@@ -6,7 +6,7 @@ class Dbconnect :
         self.user = user
         self.password = password
         self.db = db
-
+        '''self.connect = Null'''
     def connect(self):
         connection = mysql.connector.connect(host=self.host,
                                             user=self.user,
