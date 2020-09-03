@@ -10,25 +10,24 @@ CREATE TABLE categories (
 
 CREATE TABLE categoryproduct (
   idcategory INT NOT NULL ,
-  idproduct INT NOT NULL
+  idbarcode VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE products (
-  idproduct INT NOT NULL AUTO_INCREMENT UNIQUE,
+  idbarcode VARCHAR(100) NOT NULL UNIQUE,
   productname VARCHAR(200) NOT NULL,
   description VARCHAR(800),
   offlink VARCHAR(1000),
   store VARCHAR(200),
-  barcode VARCHAR(100) NOT NULL UNIQUE,
   nutritiongrade VARCHAR(1),
   bio TINYINT,
-  PRIMARY KEY (idproduct)
+  PRIMARY KEY (idbarcode)
 );
 
 CREATE TABLE substitutes (
   idboth INT NOT NULL UNIQUE AUTO_INCREMENT,
-  idproduct INT NOT NULL,
-  idsubstitute INT NOT NULL,
+  idbarcode VARCHAR(100) NOT NULL,
+  idsubstitute VARCHAR(100) NOT NULL,
   PRIMARY KEY (idboth)
 );
 
@@ -39,15 +38,15 @@ REFERENCES categories(idcategory);
 
 ALTER TABLE categoryproduct
 ADD CONSTRAINT fk_idproductcat
-FOREIGN KEY (idproduct)
-REFERENCES products(idproduct);
+FOREIGN KEY (idbarcode)
+REFERENCES products(idbarcode);
 
 ALTER TABLE substitutes
 ADD CONSTRAINT fk_idsub
 FOREIGN KEY (idsubstitute)
-REFERENCES products (idproduct);
+REFERENCES products (idbarcode);
 
 ALTER TABLE substitutes
 ADD CONSTRAINT fk_idprod
-FOREIGN KEY (idproduct)
-REFERENCES products (idproduct);
+FOREIGN KEY (idbarcode)
+REFERENCES products (idbarcode);
