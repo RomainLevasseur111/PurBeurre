@@ -2,6 +2,31 @@ import mysql.connector
 import requests
 import json
 import constants as constants
+from dbcreation import *
+
+try:
+    connection = mysql.connector.connect(host=HOST,
+                                         user=USER,
+                                         password=PASSWORD,
+                                         database='pur_beurre')
+    mycursor = connection.cursor()
+except :
+    connection = mysql.connector.connect(host=HOST,
+                                 user=USER,
+                                 password=PASSWORD)
+
+    mycursor = connection.cursor()
+    execsqlfile(mycursor, 'db.sql')
+
+
+
+
+
+
+
+
+
+
 
 
 """

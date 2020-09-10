@@ -3,8 +3,8 @@ import mysql.connector
 import json
 from constants import *
 
-def requestprod():
-    url = "https://fr.openfoodfacts.org/categorie/aliments-et-boissons-a-base-de-vegetaux.json"
+def requestprod(link):
+    url = f'"{link}.json"'
 
     payload = {}
     headers = {}
@@ -29,11 +29,37 @@ def requestprod():
     connection.commit()
     mycursor.lastrowid()
     mycursor.close()
-requestprod()
 
+def requestcat():
 
-"""
+    payload = {}
+    headers = {}
 
-boucle pour
-mettre tuple dun prod ds liste
-"""
+    response = requests.request("GET", cat_link, headers = headers, data = payload)
+    json_cat = response.json()
+    tags_cat = json_cat.get('tags')[:NB_CATEGORY]
+    name_cat = [(data.get('name'),) for data in tags_cat]
+    link_cat = [(data.get('url'),) for data in tags_cat]
+    for link in link_cat :
+        print(link[0])
+        requestprod(link[0])
+
+    sql = "INSERT IGNORE INTO categories (categoryname) VALUES (%s)"
+    connection = mysql.connector.connect(host=HOST,
+                                         user=USER,
+                                         password=PASSWORD,
+                                         database='pur_beurre')
+    mycursor = connection.cursor()
+    mycursor.executemany(sql, name_cat)
+    connection.commit()
+    mycursor.close()
+
+requestcat()
+
+def requestboth(link):
+    url = f'"{link}.json"'
+
+    payload = {}
+    headers = {}
+
+    response = requests.request("GET", url, headers = headers, data = payload)
