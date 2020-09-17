@@ -1,7 +1,7 @@
 import mysql.connector
 import requests
 import json
-import constants as constants
+from constants import *
 
 
 """

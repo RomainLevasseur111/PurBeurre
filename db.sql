@@ -3,13 +3,12 @@ CREATE DATABASE pur_beurre CHARACTER SET 'utf8';
 USE pur_beurre;
 
 CREATE TABLE categories (
-  idcategory INT NOT NULL AUTO_INCREMENT UNIQUE,
   categoryname VARCHAR(100) NOT NULL UNIQUE,
-  PRIMARY KEY (idcategory)
+  PRIMARY KEY (categoryname)
 );
 
 CREATE TABLE categoryproduct (
-  idcategory INT NOT NULL ,
+  categoryname VARCHAR(100) NOT NULL,
   idbarcode VARCHAR(100) NOT NULL
 );
 
@@ -20,7 +19,6 @@ CREATE TABLE products (
   offlink VARCHAR(1000),
   store VARCHAR(200),
   nutritiongrade VARCHAR(1),
-  bio TINYINT,
   PRIMARY KEY (idbarcode)
 );
 
@@ -33,8 +31,8 @@ CREATE TABLE substitutes (
 
 ALTER TABLE categoryproduct
 ADD CONSTRAINT fk_idcategory
-FOREIGN KEY (idcategory)
-REFERENCES categories(idcategory);
+FOREIGN KEY (categoryname)
+REFERENCES categories(categoryname);
 
 ALTER TABLE categoryproduct
 ADD CONSTRAINT fk_idproductcat
