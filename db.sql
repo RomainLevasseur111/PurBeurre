@@ -29,15 +29,6 @@ CREATE TABLE substitutes (
   PRIMARY KEY (idboth)
 );
 
-ALTER TABLE categoryproduct
-ADD CONSTRAINT fk_idcategory
-FOREIGN KEY (categoryname)
-REFERENCES categories(categoryname);
-
-ALTER TABLE categoryproduct
-ADD CONSTRAINT fk_idproductcat
-FOREIGN KEY (idbarcode)
-REFERENCES products(idbarcode);
 
 ALTER TABLE substitutes
 ADD CONSTRAINT fk_idsub
