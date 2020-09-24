@@ -1,7 +1,6 @@
 import requests
 import mysql.connector
 import json
-from categories import *
 from constants import *
 
 class Db:
@@ -43,11 +42,22 @@ class Db:
     def getCategory(cls, id):
         pass
 
+    @classmethod
+    def storeCatProd(cls, array_tuple_catprod):
+        cls.getConnection()
+        cls.mycursor.executemany(insertcatprod, array_tuple_catprod)
+        cls.dbconnect.commit()
+
+    @classmethod
+    def storeSub(cls, array_tuple_sub):
+        cls.getConnection()
+        cls.mycursor.executemany(insertsub, array_tuple_sub)
+        cls.dbconnect.commit()
 
 
 class Product:
-    def __init__(self, id_barcode, product_name, description, offlink, store, nutritiongrade):
-        self.id_barcode = id_barcode
+    def __init__(self, idbarcode, product_name, description, offlink, store, nutritiongrade):
+        self.id_barcode = idbarcode
         self.product_name = product_name
         self.description = description
         self.offlink = offlink
@@ -101,7 +111,49 @@ class Categories:
         tps = Db().getCategory(id)
         return Categories(11)
 
-"""
+
+class Categoryproduct:
+    def __init__ (self, categoryname, idbarcode):
+        self.categoryname =  categoryname
+        self.idbarcode = idbarcode
+
+    def toTuple(self):
+        return(
+            self.categoryname,
+            self.idbarcode
+        )
+
+    def save(self):
+        Db().storeCatProd([self.toTuple()])
+
+    @staticmethod
+    def saveMany(many_catprod):
+        values = [elem.toTuple() for elem in many_catprod]
+        Db().storeCatProd(values)
+
+
+class Substitute:
+    def __init__ (self, idboth, idbarcode, idsubstitute):
+        self.idboth = idboth
+        self.idbarcode = idbarcode
+        self.idsubstitute = idsubstitute
+
+    def toTuple(self):
+        return(
+            self.idboth,
+            self.idbarcode,
+            self.idsubstitute
+        )
+
+    def save(self):
+        Db().storeCatProd([self.toTuple()])
+
+    @staticmethod
+    def saveMany(many_sub):
+        values = [elem.toTuple() for elem in many_sub]
+        Db().storeSub(values)
+
+
 test1 = Categories("coucou")
 test1.saveCat()
 test2 = Categories("salut")
@@ -115,5 +167,10 @@ test3 = Product(7,8,9,10,11,2)
 Product.saveMany([test, test2, test3])
 
 test4 = Product.getOneProduct(123456789)
-print('test4', test4.toTuple())
-"""
+
+test1 = Categoryproduct("salut", "8645")
+test1.save()
+
+test2 = Categoryproduct("bonjour","4556")
+test3 = Categoryproduct("hello", "65848")
+Categoryproduct.saveMany([test2, test3])
