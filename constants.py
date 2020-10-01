@@ -1,4 +1,4 @@
-NB_CATEGORY = 1
+NB_CATEGORY = 6
 NB_PAGEPRODUCT = 1
 USER = 'OCP5'
 HOST = 'localhost'
@@ -12,3 +12,7 @@ insertprod = "INSERT IGNORE INTO products (idbarcode, productname, description, 
 insertcatprod = "INSERT IGNORE INTO categoryproduct (categoryname, idbarcode) VALUES (%s, %s)"
 
 insertsub = "INSERT IGNORE INTO substitute (idboth, idbarcode, idsubstitute) VALUES (%s, %s, %s)"
+
+productincategoryproduct = "SELECT idbarcode FROM categoryproduct WHERE categoryname = %s"
+
+completeproduct = "SELECT * FROM products WHERE idbarcode = %s"

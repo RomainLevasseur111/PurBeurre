@@ -14,18 +14,13 @@ def requestprod(cat, link):
         response = requests.request("GET", l+".json")
         json_prod = response.json()
         products_prod = json_prod.get('products')
-        prod_info = [(data.get('id'), data.get('product_name'), data.get('generic_name'), data.get('url'), data.get('stores'), data.get('nutriscore_grade')) for data in products_prod]
+        prod_info = [Product(data.get('id'), data.get('product_name'), data.get('generic_name'), data.get('url'), data.get('stores'), data.get('nutriscore_grade')) for data in products_prod]
         product_barcode = [(data.get('id'),)for data in products_prod]
         for elem in product_barcode :
             catprod = Categoryproduct(cat, elem[0])
             catprod.save()
-        product = Product(prod_info)
-        product.saveMany()
-        for elem in prod_info:
-            (elem,) = elem
-            print(elem)
-            product = Product(elem)
-            product.saveMany()
+        Product.saveMany(prod_info)
+
 
 def requestcat():
 
@@ -34,10 +29,8 @@ def requestcat():
     tags_cat = json_cat.get('tags')[:NB_CATEGORY]
     name_cat = [(data.get('name'),) for data in tags_cat]
     link_cat = [(data.get('url'),) for data in tags_cat]
-    for cat in name_cat:
-        category = Categories(cat[0])
-        category.saveCat()
-    for cat in name_cat :
-        for link in link_cat :
-            requestprod(cat[0], link[0])
+    categories = [Categories(elem[0]) for elem in name_cat]
+    Categories.saveMany(categories)
+    for index, cat in enumerate(name_cat) :
+        requestprod(cat[0], link_cat[index][0])
 requestcat()

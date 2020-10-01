@@ -27,9 +27,9 @@ class Db:
         #print('db.storeProducts:',array_tuple_product)
 
     @classmethod
-    def getProduct(cls, id):
+    def getProduct(cls, barcode):
         cls.getConnection()
-        print('db.getProduct:',id)
+        print('db.getProduct:',barcode)
 
     @classmethod
     def storeCategories(cls, array_tuple_category):
@@ -48,6 +48,18 @@ class Db:
     def storeSub(cls, array_tuple_sub):
         cls.getConnection()
         cls.mycursor.executemany(insertsub, array_tuple_sub)
+        cls.dbconnect.commit()
+
+    @classmethod
+    def getProdFromCat(cls, cat):
+        cls.getConnection()
+        cls.mycursor.executemany(productincategoryproduct, cat)
+        cls.dbconnect.commit()
+
+    @classmethod
+    def getCompProd(cls, barcode):
+        cls.getConnection()
+        cls.mycursor.executemany(completeproduct, barcode)
         cls.dbconnect.commit()
 
 
@@ -79,10 +91,19 @@ class Product:
         Db().storeProducts(values)
 
     @staticmethod
-    def getOneProduct(id):
-        tps = Db().getProduct(id)
+    def getOneProduct(barcode):
+        tps = Db().getProduct(barcode)
         return Product(11,11,11,11,11,11)
 
+    @staticmethod
+    def prodFromCat(category):
+        listofbarcode  = []
+        listofproducts = []
+        listofbarcode.append(Db().getProdFromCat(category))
+        for elem in listofbarcode:
+            listofproducts.append(Db().getCompProd(elem))
+        for elem in listofproducts:
+            return getOneProduct(elem)
 
 
 class Categories:
@@ -111,7 +132,7 @@ class Categoryproduct:
     def toTuple(self):
         return(
             self.categoryname,
-            self.idbarcode
+            self.idbarcode,
         )
 
     def save(self):
@@ -149,3 +170,7 @@ class Substitute:
         ids = Db().getProduct(idsub)
         idp = Db().getProduct(idprod)
         return [Product(),Product()]
+
+
+catname = ("Snacks",)
+Product.prodFromCat(catname)
