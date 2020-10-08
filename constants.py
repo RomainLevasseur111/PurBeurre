@@ -2,7 +2,10 @@ NB_CATEGORY = 6
 NB_PAGEPRODUCT = 1
 USER = 'OCP5'
 HOST = 'localhost'
-PASSWORD = ''
+PASSWORD = 'rluchiwa00'
+selected_category = ['Snacks']
+selected_product = []
+
 cat_link = "https://fr.openfoodfacts.org/categories.json"
 
 insertcat = "INSERT IGNORE INTO categories (categoryname) VALUES (%s)"
@@ -13,6 +16,8 @@ insertcatprod = "INSERT IGNORE INTO categoryproduct (categoryname, idbarcode) VA
 
 insertsub = "INSERT IGNORE INTO substitute (idboth, idbarcode, idsubstitute) VALUES (%s, %s, %s)"
 
-productincategoryproduct = "SELECT idbarcode FROM categoryproduct WHERE categoryname = %s"
+getproductfromcat = "SELECT * FROM products INNER JOIN categoryproduct ON categoryproduct.idbarcode = products.idbarcode WHERE categoryname = %s"
+
+getsub =  "SELECT * FROM products INNER JOIN categoryproduct ON products.idbarcode = categoryproduct.idbarcode WHERE categoryproduct.categoryname = %s AND products.nutritiongrade = %s"
 
 completeproduct = "SELECT * FROM products WHERE idbarcode = %s"

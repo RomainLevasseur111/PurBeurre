@@ -14,7 +14,7 @@ class Db:
     @classmethod
     def getConnection(cls):
         if cls.connection == None:
-            cls.mycursor = cls.dbconnect.cursor()
+            cls.mycursor = cls.dbconnect.cursor(buffered=True)
             cls.connection = "connected"
             print("Db connected")
         return cls.connection
@@ -24,19 +24,18 @@ class Db:
         cls.getConnection()
         cls.mycursor.executemany(insertprod, array_tuple_product)
         cls.dbconnect.commit()
-        #print('db.storeProducts:',array_tuple_product)
 
     @classmethod
     def getProduct(cls, barcode):
         cls.getConnection()
-        print('db.getProduct:',barcode)
+        cls.mycursor.execute(completeproduct, (barcode,))
+        return cls.mycursor.fetchone()
 
     @classmethod
     def storeCategories(cls, array_tuple_category):
         cls.getConnection()
         cls.mycursor.executemany(insertcat, array_tuple_category)
         cls.dbconnect.commit()
-        #print('db.storeCategories:',array_tuple_category)
 
     @classmethod
     def storeCatProd(cls, array_tuple_catprod):
@@ -53,14 +52,14 @@ class Db:
     @classmethod
     def getProdFromCat(cls, cat):
         cls.getConnection()
-        cls.mycursor.executemany(productincategoryproduct, cat)
-        cls.dbconnect.commit()
+        cls.mycursor.execute(getproductfromcat, (cat,))
+        return cls.mycursor.fetchall()
 
     @classmethod
-    def getCompProd(cls, barcode):
+    def getSubstitute(cls, cat, nutri):
         cls.getConnection()
-        cls.mycursor.executemany(completeproduct, barcode)
-        cls.dbconnect.commit()
+        cls.mycursor.execute(getsub,(cat, nutri))
+        return cls.mycursor.fetchall()
 
 
 class Product:
@@ -92,19 +91,20 @@ class Product:
 
     @staticmethod
     def getOneProduct(barcode):
-        tps = Db().getProduct(barcode)
-        return Product(11,11,11,11,11,11)
+        (idbarcode, product_name, description, offlink, store, nutritiongrade) = Db().getProduct(barcode)
+        print((idbarcode, product_name, description, offlink, store, nutritiongrade))
+        return (idbarcode, product_name, description, offlink, store, nutritiongrade)
 
     @staticmethod
     def prodFromCat(category):
-        listofbarcode  = []
-        listofproducts = []
-        listofbarcode.append(Db().getProdFromCat(category))
-        for elem in listofbarcode:
-            listofproducts.append(Db().getCompProd(elem))
-        for elem in listofproducts:
-            return getOneProduct(elem)
+        listofproducts = [Db().getProdFromCat(category)]
+        print(listofproducts)
 
+    @staticmethod
+    def allSubstitutes(category, nutritiongrade):
+        listofpossiblesub = [Db().getSubstitute(category, nutritiongrade)]
+        for elem in listofpossiblesub:
+            print(elem)
 
 class Categories:
     def __init__(self, categoryname):
@@ -172,5 +172,6 @@ class Substitute:
         return [Product(),Product()]
 
 
-catname = ("Snacks",)
-Product.prodFromCat(catname)
+
+Product.getOneProduct('80008859')
+"""Product.allSubstitutes(selected_category[0], 'd')"""

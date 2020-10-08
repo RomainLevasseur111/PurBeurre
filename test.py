@@ -1,20 +1,5 @@
 
-trouver un substitut mm cat nutriscore sup
 
-def subfromprod(barcode, nutritiongrade):
-    listofcat = ["SELECT * FROM categoryproduct WHERE idbarcode = barcode"]
-    listofbarcode = []
-    for elem in listofcat:
-        pass
+tester et remplir la table substitut
 
-
-
-
-
-
-def prodfromcat(cat):
-    listofproducts = []
-    listofproducts.add(sql)
-    "SELECT idbarcode FROM categoryproduct WHERE categoryname = %s"
-    for elem in listofproducts :
-        "SELECT * FROM 'products' WHERE idbarcode = elem"
+faire fonctionner le getOneporuct
