@@ -14,7 +14,7 @@ insertprod = "INSERT IGNORE INTO products (idbarcode, productname, description, 
 
 insertcatprod = "INSERT IGNORE INTO categoryproduct (categoryname, idbarcode) VALUES (%s, %s)"
 
-insertsub = "INSERT IGNORE INTO substitute (idboth, idbarcode, idsubstitute) VALUES (%s, %s, %s)"
+insertsub = "INSERT IGNORE INTO substitutes (idbarcode, idsubstitute) VALUES (%s, %s)"
 
 getproductfromcat = "SELECT * FROM products INNER JOIN categoryproduct ON categoryproduct.idbarcode = products.idbarcode WHERE categoryname = %s"
 

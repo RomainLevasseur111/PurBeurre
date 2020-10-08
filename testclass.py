@@ -93,7 +93,7 @@ class Product:
     def getOneProduct(barcode):
         (idbarcode, product_name, description, offlink, store, nutritiongrade) = Db().getProduct(barcode)
         print((idbarcode, product_name, description, offlink, store, nutritiongrade))
-        return (idbarcode, product_name, description, offlink, store, nutritiongrade)
+        return Product(idbarcode, product_name, description, offlink, store, nutritiongrade)
 
     @staticmethod
     def prodFromCat(category):
@@ -145,20 +145,18 @@ class Categoryproduct:
 
 
 class Substitute:
-    def __init__ (self, idboth, idbarcode, idsubstitute):
-        self.idboth = idboth
+    def __init__ (self, idbarcode, idsubstitute):
         self.idbarcode = idbarcode
         self.idsubstitute = idsubstitute
 
     def toTuple(self):
         return(
-            self.idboth,
             self.idbarcode,
             self.idsubstitute
         )
 
     def save(self):
-        Db().storeCatProd([self.toTuple()])
+        Db().storeSub([self.toTuple()])
 
     @staticmethod
     def saveMany(many_sub):
@@ -172,6 +170,9 @@ class Substitute:
         return [Product(),Product()]
 
 
+sub1 = Substitute('20712631','3760043030163')
+sub1.save()
 
-Product.getOneProduct('80008859')
-"""Product.allSubstitutes(selected_category[0], 'd')"""
+
+"""Product.getOneProduct('80008859')
+Product.allSubstitutes(selected_category[0], 'd')"""
