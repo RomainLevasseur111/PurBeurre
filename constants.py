@@ -2,7 +2,7 @@ NB_CATEGORY = 6
 NB_PAGEPRODUCT = 1
 USER = 'OCP5'
 HOST = 'localhost'
-PASSWORD = 'rluchiwa00'
+PASSWORD = ''
 selected_category = ['Snacks']
 selected_product = []
 
