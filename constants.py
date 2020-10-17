@@ -21,3 +21,7 @@ getproductfromcat = "SELECT * FROM products INNER JOIN categoryproduct ON catego
 getsub =  "SELECT * FROM products INNER JOIN categoryproduct ON products.idbarcode = categoryproduct.idbarcode WHERE categoryproduct.categoryname = %s AND products.nutritiongrade = %s"
 
 completeproduct = "SELECT * FROM products WHERE idbarcode = %s"
+
+getallsubs = "SELECT * FROM substitutes"
+
+getallcats = "SELECT * FROM categories"

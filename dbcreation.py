@@ -2,11 +2,12 @@ import mysql.connector
 from constants import *
 
 connection = mysql.connector.connect(host=HOST,
-                             user=USER,
-                             password=PASSWORD)
+                                     user=USER,
+                                     password=PASSWORD)
 
 mycursor = connection.cursor()
 def execsqlfile(cursor, sql_file):
+
     statement = ""
     for line in open(sql_file):
         if line.strip().endswith(';') :

@@ -3,6 +3,7 @@ CREATE DATABASE pur_beurre CHARACTER SET 'utf8';
 USE pur_beurre;
 
 CREATE TABLE categories (
+  categoryid INT NOT NULL UNIQUE AUTO_INCREMENT,
   categoryname VARCHAR(100) NOT NULL UNIQUE,
   PRIMARY KEY (categoryname)
 );
@@ -13,6 +14,7 @@ CREATE TABLE categoryproduct (
 );
 
 CREATE TABLE products (
+  productid INT NOT NULL UNIQUE AUTO_INCREMENT,
   idbarcode VARCHAR(100) NOT NULL UNIQUE,
   productname VARCHAR(200) NOT NULL,
   description VARCHAR(800),

@@ -61,6 +61,17 @@ class Db:
         cls.mycursor.execute(getsub,(cat, nutri))
         return cls.mycursor.fetchall()
 
+    @classmethod
+    def getAllSubs(cls):
+        cls.getConnection()
+        cls.mycursor.execute(getallsubs)
+        return cls.mycursor.fetchall()
+
+    @classmethod
+    def getAllCategories(cls):
+        cls.getConnection()
+        cls.mycursor.execute(getallcats)
+        return cls.mycursor.fetchall()
 
 class Product:
     def __init__(self, idbarcode, product_name, description, offlink, store, nutritiongrade):
@@ -70,6 +81,9 @@ class Product:
         self.offlink = offlink
         self.store = store
         self.nutritiongrade = nutritiongrade
+
+    """def __repr__(self):
+        return str(Product(idbarcode, product_name, description, offlink, store, nutritiongrade))"""
 
     def toTuple(self):
         return (
@@ -91,8 +105,7 @@ class Product:
 
     @staticmethod
     def getOneProduct(barcode):
-        (idbarcode, product_name, description, offlink, store, nutritiongrade) = Db().getProduct(barcode)
-        print((idbarcode, product_name, description, offlink, store, nutritiongrade))
+        (productid, idbarcode, product_name, description, offlink, store, nutritiongrade) = Db().getProduct(barcode)
         return Product(idbarcode, product_name, description, offlink, store, nutritiongrade)
 
     @staticmethod
@@ -122,6 +135,11 @@ class Categories:
     def saveMany(many_categories):
         values = [elem.toTuple() for elem in many_categories]
         Db().storeCategories(values)
+
+    @staticmethod
+    def getAllCat():
+        for elem in Db().getAllCategories():
+            print(elem)
 
 
 class Categoryproduct:
@@ -169,10 +187,5 @@ class Substitute:
         idp = Db().getProduct(idprod)
         return [Product(),Product()]
 
-
-sub1 = Substitute('20712631','3760043030163')
-sub1.save()
-
-
-"""Product.getOneProduct('80008859')
-Product.allSubstitutes(selected_category[0], 'd')"""
+    def getAllSubstitute():
+        print(Db().getAllSubs())
