@@ -5,15 +5,14 @@ from constants import *
 
 class Db:
     connection = None
-    dbconnect = mysql.connector.connect(host=HOST,
-                                        user=USER,
-                                        password=PASSWORD,
-                                        database='pur_beurre')
-    mycursor = None
 
     @classmethod
     def getConnection(cls):
         if cls.connection == None:
+            cls.dbconnect = mysql.connector.connect(host=HOST,
+                                                user=USER,
+                                                password=PASSWORD,
+                                                database='pur_beurre')
             cls.mycursor = cls.dbconnect.cursor(buffered=True)
             cls.connection = "connected"
             print("Db connected")
@@ -58,7 +57,7 @@ class Db:
     @classmethod
     def getSubstitute(cls, cat, nutri):
         cls.getConnection()
-        cls.mycursor.execute(getsub,(cat, nutri))
+        cls.mycursor.execute(nutri, (cat,))
         return cls.mycursor.fetchall()
 
     @classmethod
@@ -73,6 +72,12 @@ class Db:
         cls.mycursor.execute(getallcats)
         return cls.mycursor.fetchall()
 
+    @classmethod
+    def selectCat(cls, categoryid):
+        cls.getConnection()
+        cls.mycursor.execute(selectcat, (categoryid,))
+        return cls.mycursor.fetchone()
+
 class Product:
     def __init__(self, idbarcode, product_name, description, offlink, store, nutritiongrade):
         self.id_barcode = idbarcode
@@ -82,8 +87,8 @@ class Product:
         self.store = store
         self.nutritiongrade = nutritiongrade
 
-    """def __repr__(self):
-        return str(Product(idbarcode, product_name, description, offlink, store, nutritiongrade))"""
+    def __str__(self):
+        return "{}"
 
     def toTuple(self):
         return (
@@ -105,23 +110,26 @@ class Product:
 
     @staticmethod
     def getOneProduct(barcode):
-        (productid, idbarcode, product_name, description, offlink, store, nutritiongrade) = Db().getProduct(barcode)
-        return Product(idbarcode, product_name, description, offlink, store, nutritiongrade)
+        (idbarcode, product_name, description, offlink, store, nutritiongrade) = Db().getProduct(barcode)
+        return idbarcode, product_name, description, offlink, store, nutritiongrade
 
     @staticmethod
     def prodFromCat(category):
-        listofproducts = [Db().getProdFromCat(category)]
-        print(listofproducts)
+        prods = []
+        for elem in Db().getProdFromCat(category):
+            prods.append(Product.getOneProduct(elem[0]))
+        return prods
 
     @staticmethod
     def allSubstitutes(category, nutritiongrade):
-        listofpossiblesub = [Db().getSubstitute(category, nutritiongrade)]
-        for elem in listofpossiblesub:
-            print(elem)
+        return Db().getSubstitute(category, nutritiongrade)
 
 class Categories:
     def __init__(self, categoryname):
         self.categoryname = categoryname
+
+    def __str__(self):
+        return "{}"
 
     def toTuple(self):
         return (
@@ -138,9 +146,13 @@ class Categories:
 
     @staticmethod
     def getAllCat():
-        for elem in Db().getAllCategories():
-            print(elem)
+        return Db().getAllCategories()
 
+
+    @classmethod
+    def getOneCat(self, categoryid):
+        (categoryname) = Db().selectCat(categoryid)
+        return (categoryname[0])
 
 class Categoryproduct:
     def __init__ (self, categoryname, idbarcode):
@@ -188,4 +200,4 @@ class Substitute:
         return [Product(),Product()]
 
     def getAllSubstitute():
-        print(Db().getAllSubs())
+        return Db().getAllSubs()

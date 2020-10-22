@@ -1,4 +1,4 @@
-from pur_beurre import *
+from classes.pur_beurre import *
 
 class Product:
     def __init__(self, idbarcode, product_name, description, offlink, store, nutritiongrade):
@@ -9,8 +9,8 @@ class Product:
         self.store = store
         self.nutritiongrade = nutritiongrade
 
-    """def __repr__(self):
-        return str(Product(idbarcode, product_name, description, offlink, store, nutritiongrade))"""
+    def __str__(self):
+        return "{}"
 
     def toTuple(self):
         return (
@@ -32,7 +32,7 @@ class Product:
 
     @staticmethod
     def getOneProduct(barcode):
-        (productid, idbarcode, product_name, description, offlink, store, nutritiongrade) = Db().getProduct(barcode)
+        (idbarcode, product_name, description, offlink, store, nutritiongrade) = Db().getProduct(barcode)
         return Product(idbarcode, product_name, description, offlink, store, nutritiongrade)
 
     @staticmethod

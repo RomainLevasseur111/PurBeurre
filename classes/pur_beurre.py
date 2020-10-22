@@ -1,14 +1,14 @@
+from constants import *
+import mysql.connector
 class Db:
     connection = None
-    dbconnect = mysql.connector.connect(host=HOST,
-                                        user=USER,
-                                        password=PASSWORD,
-                                        database='pur_beurre')
-    mycursor = None
-
     @classmethod
     def getConnection(cls):
         if cls.connection == None:
+            cls.dbconnect = mysql.connector.connect(host=HOST,
+                                                user=USER,
+                                                password=PASSWORD,
+                                                database='pur_beurre')
             cls.mycursor = cls.dbconnect.cursor(buffered=True)
             cls.connection = "connected"
             print("Db connected")

@@ -27,3 +27,5 @@ class Substitute:
 
     def getAllSubstitute():
         print(Db().getAllSubs())
+
+Substitute.getAllSubstitute()

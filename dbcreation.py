@@ -18,4 +18,4 @@ def execsqlfile(cursor, sql_file):
             statement = statement + line
     connection.commit()
     mycursor.close()
-execsqlfile(mycursor, 'db.sql')
+"""execsqlfile(mycursor, 'db.sql')"""
