@@ -33,15 +33,15 @@ class Product:
     @staticmethod
     def getOneProduct(barcode):
         (idbarcode, product_name, description, offlink, store, nutritiongrade) = Db().getProduct(barcode)
-        return Product(idbarcode, product_name, description, offlink, store, nutritiongrade)
+        return idbarcode, product_name, description, offlink, store, nutritiongrade
 
     @staticmethod
     def prodFromCat(category):
-        listofproducts = [Db().getProdFromCat(category)]
-        print(listofproducts)
+        prods = []
+        for elem in Db().getProdFromCat(category):
+            prods.append(Product.getOneProduct(elem[0]))
+        return prods
 
     @staticmethod
     def allSubstitutes(category, nutritiongrade):
-        listofpossiblesub = [Db().getSubstitute(category, nutritiongrade)]
-        for elem in listofpossiblesub:
-            print(elem)
+        return Db().getSubstitute(category, nutritiongrade)

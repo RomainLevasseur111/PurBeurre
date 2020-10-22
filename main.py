@@ -3,11 +3,14 @@ import mysql.connector
 import requests
 import json
 from constants import *
-from testclass import *
+from classes.categories import *
+from classes.products import *
+from classes.pur_beurre import *
+from classes.categoryproduct import *
+from classes.substitutes import *
 from dbcreation import *
-from api_request import *
 
-
+SELECTED_PRODUCT = []
 
 try:
     connection = mysql.connector.connect(host=HOST,
@@ -16,20 +19,22 @@ try:
                                          database='pur_beurre')
     mycursor = connection.cursor()
 except mysql.connector.errors.ProgrammingError:
-    print("La base de donnée est inexistante.\n"
-    "Création et remplissage de la base de donnée...\n")
+    print("Database doesn't exist.\n"
+    "Creating and filling database.\n")
     execsqlfile(mycursor, 'db.sql')
     requestcat()
 
 def menu():
     choice = input("Enter the number corresponding to the menu:\n"
-    "1 : Find a substitute.\n"
-    "2 : Manage database.\n"
+    "1 : Manage substitutes.\n"
+    "2 : Update database. (Delete all saved products.)\n"
     "Enter anything else to exit.\n")
     if choice == "1":
         subsMenu()
     elif choice == "2":
-        print("qqc")
+        execsqlfile(mycursor, 'db.sql')
+        requestcat()
+        print("Database up to date!")
 
     else:
         sys.exit()
@@ -39,26 +44,30 @@ def menu():
 def subsMenu():
     choice = input("1 : You want to find a new substitute.\n"
     "2 : You want to see your saved substitutes.\n"
+    "3 : You want to delete saved substitutes.\n"
     "Enter anything else to exit.\n")
     if choice == "1":
         selectCat()
     elif choice == "2":
-        for elem in Substitute.getAllSubstitute():
-            print("Produit substitué numéro "+ str(elem[0]) +":\n"
-            "Code barre : " + str(Product.getOneProduct(elem[1])[0]) + "\n"
-            "Nom du produit : " + str(Product.getOneProduct(elem[1])[1]) + "\n"
-            "Description : " + str(Product.getOneProduct(elem[1])[2]) +  "\n"
-            "Lien OpenFoodFacts : " + str(Product.getOneProduct(elem[1])[3]) + "\n"
-            "Magasins où l'acheter : " + str(Product.getOneProduct(elem[1])[4]) + "\n"
-            "Nutriscore : " + str(Product.getOneProduct(elem[1])[5]) + "\n\n"
-            "Substitut numéro "+ str(elem[0]) +":\n"
-            "Code barre : " + str(Product.getOneProduct(elem[2])[0]) + "\n"
-            "Nom du produit : " + str(Product.getOneProduct(elem[2])[1]) + "\n"
-            "Description : " + str(Product.getOneProduct(elem[2])[2]) +  "\n"
-            "Lien OpenFoodFacts : " + str(Product.getOneProduct(elem[2])[3]) + "\n"
-            "Magasins où l'acheter : " + str(Product.getOneProduct(elem[2])[4]) + "\n"
-            "Nutriscore : " + str(Product.getOneProduct(elem[2])[5]) + "\n\n"
-            )
+        if seeAllSubs() == None:
+            print("You have no saved substitutes.\n")
+            back = input("Enter 1 to back. Anything else to exit.\n")
+            if back == "1":
+                subsMenu()
+            else:
+                sys.exit()
+        seeAllSubs()
+    elif choice == "3":
+        if seeAllSubs() == None:
+            print("You have no saved substitutes.\n")
+            back = input("Enter 1 to back. Anything else to exit.\n")
+            if back == "1":
+                subsMenu()
+            else:
+                sys.exit()
+        seeAllSubs()
+        choice = input("Enter the number corresponding to the substitute you want to delete.\n")
+        Substitute.deleteSub(choice)
     else:
         sys.exit()
 
@@ -67,74 +76,140 @@ def selectCat():
     for index, elem in enumerate(Categories.getAllCat()):
         print(str(index) + " : " + elem[0])
     choice = input("Chose your category.\n")
-    choice = int(choice)
-    SELECTED_CATEGORY = Categories.getAllCat()[choice][0]
+    try:
+        choice = int(choice)
+    except ValueError:
+        print("Your entry is invalid.")
+        input("Press any key to back to main menu.\n")
+        menu()
+    selectprod(choice)
+
+
+def selectprod(choice):
+    global SELECTED_PRODUCT
+    SELECTED_PRODUCT = []
+    SELECTED_CATEGORY = None
+    try:
+        SELECTED_CATEGORY = Categories.getAllCat()[choice][0]
+    except IndexError:
+        print("The key you pressed doesn't correspond to any category.\n")
+        input("Press any key to back to main menu.\n")
+        menu()
     for index, elem in enumerate(Product.prodFromCat(SELECTED_CATEGORY)):
-        print("Produit numéro " + str(index) + " : \n"
-        "Code barre : " + elem[0] + "\n"
-        "Nom du produit : " + str(elem[1]) + "\n"
+        print("Product number " + str(index) + " : \n"
+        "Barre code : " + elem[0] + "\n"
+        "Product name : " + str(elem[1]) + "\n"
         "Description : " + str(elem[2]) +  "\n"
-        "Lien OpenFoodFacts : " + str(elem[3]) + "\n"
-        "Magasins où l'acheter : " + str(elem[4]) + "\n"
+        "OpenFoodFacts link : " + str(elem[3]) + "\n"
+        "Store(s) : " + str(elem[4]) + "\n"
         "Nutriscore : " + str(elem[5]) + "\n\n")
     choiceprod = input("Chose the product you want to substitute.\n")
-    choiceprod = int(choiceprod)
-    SELECTED_PRODUCT.append(Product.prodFromCat(SELECTED_CATEGORY)[choiceprod][0])
+    try:
+        choiceprod = int(choiceprod)
+    except ValueError:
+        print("Your entry is invalid.")
+        input("Press any key to back to main menu.\n")
+        menu()
+    try:
+        SELECTED_PRODUCT.append(Product.prodFromCat(SELECTED_CATEGORY)[choiceprod][0])
+    except IndexError:
+        print("The key you pressed doesn't correspond to any product.\n")
+        input("Press any key to back to main menu.\n")
+        menu()
     if Product.prodFromCat(SELECTED_CATEGORY)[choiceprod][5] == "a":
-        print("The product you selected has the highest possible nutriscore. Please chose another one.")
-        quit()
+        print("The product you selected has the highest possible nutriscore. Please chose another one.\n")
+        back = input("1 : Back to products.\n"
+        "2 : Back to categories.\n"
+        "Anything else to exit.\n")
+        if back == "1":
+            selectprod(choice)
+        elif back == "2":
+            selectCat()
+        else:
+            sys.exit()
     elif Product.prodFromCat(SELECTED_CATEGORY)[choiceprod][5] == "b":
-        selectsub(SELECTED_CATEGORY, b)
+        selectsub(SELECTED_CATEGORY, b, choice)
     elif Product.prodFromCat(SELECTED_CATEGORY)[choiceprod][5] == "c":
-        selectsub(SELECTED_CATEGORY, c)
+        selectsub(SELECTED_CATEGORY, c, choice)
     elif Product.prodFromCat(SELECTED_CATEGORY)[choiceprod][5] == "d":
-        selectsub(SELECTED_CATEGORY, d)
+        selectsub(SELECTED_CATEGORY, d, choice)
     elif Product.prodFromCat(SELECTED_CATEGORY)[choiceprod][5] == "e":
-        selectsub(SELECTED_CATEGORY, e)
+        selectsub(SELECTED_CATEGORY, e, choice)
     else :
         print("The product you selected has no nutriscore. Please chose another one.")
+        back = input("1 : Back to products.\n"
+        "2 : Back to categories.\n"
+        "Anything else to exit.\n")
+        if back == "1":
+            selectprod(choice)
+        elif back == "2":
+            selectCat()
+        else:
+            sys.exit()
 
-
-def selectsub(category, nutriscore):
+def selectsub(category, nutriscore, choice):
+    global SELECTED_PRODUCT
+    if Product.allSubstitutes(category, nutriscore) == []:
+        print("The product you selected has no higher nutriscore substitute. Please chose another one")
+        back = input("1 : Back to products.\n"
+        "2 : Back to categories.\n"
+        "Anything else to exit.\n")
+        if back == "1":
+            selectprod(choice)
+        elif back == "2":
+            selectCat()
+        else:
+            sys.exit()
     for index, elem in enumerate(Product.allSubstitutes(category, nutriscore)):
-        print("Produit numéro " + str(index) + " : \n"
-        "Code barre : " + elem[0] + "\n"
-        "Nom du produit : " + str(elem[1]) + "\n"
+        print("Product number " + str(index) + " : \n"
+        "Barre code : " + elem[0] + "\n"
+        "Product name : " + str(elem[1]) + "\n"
         "Description : " + str(elem[2]) +  "\n"
-        "Lien OpenFoodFacts : " + str(elem[3]) + "\n"
-        "Magasins où l'acheter : " + str(elem[4]) + "\n"
+        "OpenFoodFacts link : " + str(elem[3]) + "\n"
+        "Store(s) : " + str(elem[4]) + "\n"
         "Nutriscore : " + str(elem[5]) + "\n\n")
-    choice = input("Select the substitute you want.\n")
-    choice = int(choice)
-    SELECTED_PRODUCT.append(Product.allSubstitutes(category, nutriscore)[choice][0])
-    choice = input("Do you want to save them?\n"
+    choicesub = input("Select the substitute you want.\n")
+    try:
+        choicesub = int(choicesub)
+    except ValueError:
+        print("Your entry is invalid.")
+        input("Press any key to back to main menu.\n")
+        menu()
+    try:
+        SELECTED_PRODUCT.append(Product.allSubstitutes(category, nutriscore)[choicesub][0])
+    except IndexError:
+        print("The key you pressed doesn't correspond to any product.\n")
+        input("Press any key to back to main menu.\n")
+        menu()
+    choicesave = input("Do you want to save them?\n"
     "1 : Yes.\n"
     "2 : No.\n")
-    if choice == "1" :
+    if choicesave == "1" :
         Substitute(SELECTED_PRODUCT[0],SELECTED_PRODUCT[1]).save()
+        input("Press any key to back to main menu.\n")
+        menu()
     else:
         sys.exit()
-menu()
 
 
-"""1er screen 2 choix
-1:substituer
-    2 choix:
-    1trouver un sub
-        choisir catégorie
-            choisir produit
-    2voir les sub svg
-2gerer bdd
-    1 maj bdd
-    2reinit bdd
-    3 sup elem svg"""
 
-
-"""
-lance le programme
-essaie de se connecter à la bdd
-si inexistante : dbcreation.py puis se connecte
-api_cat_request.py
-stocker la cat lors du choix de l'utilisateur
-
-"""
+def seeAllSubs():
+    for elem in Substitute.getAllSubstitute():
+        print("Product substitued number "+ str(elem[0]) +":\n"
+        "Barre code : " + str(Product.getOneProduct(elem[1])[0]) + "\n"
+        "Product name : " + str(Product.getOneProduct(elem[1])[1]) + "\n"
+        "Description : " + str(Product.getOneProduct(elem[1])[2]) +  "\n"
+        "OpenFoodFacts link : " + str(Product.getOneProduct(elem[1])[3]) + "\n"
+        "Store(s) : " + str(Product.getOneProduct(elem[1])[4]) + "\n"
+        "Nutriscore : " + str(Product.getOneProduct(elem[1])[5]) + "\n\n"
+        "Substitute number "+ str(elem[0]) +":\n"
+        "barre code : " + str(Product.getOneProduct(elem[2])[0]) + "\n"
+        "Product name : " + str(Product.getOneProduct(elem[2])[1]) + "\n"
+        "Description : " + str(Product.getOneProduct(elem[2])[2]) +  "\n"
+        "OpenFoodFacts link : " + str(Product.getOneProduct(elem[2])[3]) + "\n"
+        "Store(s) : " + str(Product.getOneProduct(elem[2])[4]) + "\n"
+        "Nutriscore : " + str(Product.getOneProduct(elem[2])[5]) + "\n\n"
+        )
+        
+if __name__ == '__main__':
+    menu()

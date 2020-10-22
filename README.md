@@ -3,18 +3,26 @@
 
 La startup Pur Beurre nous demande de créer un programme interagissant avec la base de données d'OpenFoodFacts afin d'en __récupérer les aliments__ et leurs descriptions, et de donner la possibilité aux utilisateurs de lui __trouver un substitut__.
 
+
+### Installation
+
+Type python main.py to start the program.
+
+
 ### Description
 Si l'utilisateur ouvre le programme pour la première fois, il crée une nouvelle base de donnée, sinon il selectionne automatiquement la base de donnée existante.
 
 Deux choix s'offrent à l'utilisateur :
   1. "Substituer un aliment."
 
-  2. "Gérer la base de donnée."
+  2. "Mettre à jour la base de donnée"
 
-Si l'utilisateur choisi "Substituer un aliment", il a deux nouveaux choix :
-  1. Quel aliment souhaitez-vous remplacer ?
+Si l'utilisateur choisi "Substituer un aliment", il a trois nouveaux choix :
+  1. Substituer un aliment.
 
   2. Retrouver les aliments substitués.
+
+  3. Supprimer un des éléments sauvegardé.
 
   Si l'utilisateur sélectionne 1. Le programme pose les questions suivantes à l'utilisateur et ce dernier sélectionne les réponses :
 
@@ -26,12 +34,9 @@ Si l'utilisateur choisi "Substituer un aliment", il a deux nouveaux choix :
 
     - L'utilisateur a alors la possibilité d'enregistrer le résultat dans la base de données.
 
-Si l'utilisateur choisi "Gérer la base de donnée", il a trois choix :
-  1. Mettre à jour la base de données.
-
-  2. Réinitialiser les éléments sauvegardés.
-
-  3. Supprimer un des éléments sauvegardé.
 
 
-++++++++++ comment instaler les fichiers dans requirement.txt et comment le lancer 
+
+
+
+++++++++++ comment instaler les fichiers dans requirement.txt et comment le lancer

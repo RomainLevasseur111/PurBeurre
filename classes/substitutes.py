@@ -1,5 +1,5 @@
-from pur_beurre import *
-from products import *
+from classes.pur_beurre import *
+from classes.products import *
 class Substitute:
     def __init__ (self, idbarcode, idsubstitute):
         self.idbarcode = idbarcode
@@ -25,7 +25,11 @@ class Substitute:
         idp = Db().getProduct(idprod)
         return [Product(),Product()]
 
+    @staticmethod
     def getAllSubstitute():
-        print(Db().getAllSubs())
+        return Db().getAllSubs()
 
-Substitute.getAllSubstitute()
+    @staticmethod
+    def deleteSub(idboth):
+        Db().delSub(idboth)
+        print("Deleted.")

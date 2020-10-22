@@ -33,4 +33,3 @@ def requestcat():
     Categories.saveMany(categories)
     for index, cat in enumerate(name_cat) :
         requestprod(cat[0], link_cat[index][0])
-"""requestcat()"""

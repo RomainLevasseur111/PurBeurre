@@ -1,4 +1,4 @@
-from pur_beurre import *
+from classes.pur_beurre import *
 
 class Categoryproduct:
     def __init__ (self, categoryname, idbarcode):

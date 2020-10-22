@@ -1,8 +1,11 @@
-from pur_beurre import *
+from classes.pur_beurre import *
 
 class Categories:
     def __init__(self, categoryname):
         self.categoryname = categoryname
+
+    def __str__(self):
+        return "{}"
 
     def toTuple(self):
         return (
@@ -19,5 +22,10 @@ class Categories:
 
     @staticmethod
     def getAllCat():
-        for elem in Db().getAllCategories():
-            print(elem)
+        return Db().getAllCategories()
+
+
+    @classmethod
+    def getOneCat(self, categoryid):
+        (categoryname) = Db().selectCat(categoryid)
+        return (categoryname[0])

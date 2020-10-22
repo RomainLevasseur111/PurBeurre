@@ -1,7 +1,9 @@
 from constants import *
 import mysql.connector
+
 class Db:
     connection = None
+
     @classmethod
     def getConnection(cls):
         if cls.connection == None:
@@ -11,7 +13,6 @@ class Db:
                                                 database='pur_beurre')
             cls.mycursor = cls.dbconnect.cursor(buffered=True)
             cls.connection = "connected"
-            print("Db connected")
         return cls.connection
 
     @classmethod
@@ -53,7 +54,7 @@ class Db:
     @classmethod
     def getSubstitute(cls, cat, nutri):
         cls.getConnection()
-        cls.mycursor.execute(getsub,(cat, nutri))
+        cls.mycursor.execute(nutri, (cat,))
         return cls.mycursor.fetchall()
 
     @classmethod
@@ -61,3 +62,21 @@ class Db:
         cls.getConnection()
         cls.mycursor.execute(getallsubs)
         return cls.mycursor.fetchall()
+
+    @classmethod
+    def getAllCategories(cls):
+        cls.getConnection()
+        cls.mycursor.execute(getallcats)
+        return cls.mycursor.fetchall()
+
+    @classmethod
+    def selectCat(cls, categoryid):
+        cls.getConnection()
+        cls.mycursor.execute(selectcat, (categoryid,))
+        return cls.mycursor.fetchone()
+
+    @classmethod
+    def delSub(cls, idboth):
+        cls.getConnection()
+        cls.mycursor.execute(deletesave, (idboth,))
+        cls.dbconnect.commit()
