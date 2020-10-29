@@ -1,42 +1,31 @@
-# Projet 5 Openclassrooms
+# Openclassroom projet 5
 ## Utilisation des données publiques d'OpenFoodFacts
 
 La startup Pur Beurre nous demande de créer un programme interagissant avec la base de données d'OpenFoodFacts afin d'en __récupérer les aliments__ et leurs descriptions, et de donner la possibilité aux utilisateurs de lui __trouver un substitut__.
 
 
-### Installation
-
-Type python main.py to start the program.
+### Installation and launch program
+Git clone the files.
+"pip install -r requirements.txt" in command prompt to install needed packages.
+Change constants.py parameters to your convenience.
+Type python main.py in command prompt to start the program.
 
 
 ### Description
-Si l'utilisateur ouvre le programme pour la première fois, il crée une nouvelle base de donnée, sinon il selectionne automatiquement la base de donnée existante.
+If the database doesn't exist, the program creates and fills it automatically when launch
 
-Deux choix s'offrent à l'utilisateur :
-  1. "Substituer un aliment."
+User as two options :
+  1. "Manage substitutes."
 
-  2. "Mettre à jour la base de donnée"
+  2. "Update database. (Delete all saved products.)"
 
-Si l'utilisateur choisi "Substituer un aliment", il a trois nouveaux choix :
-  1. Substituer un aliment.
+If user chose "Manage substitutes", he has 3 new options :
+  1. "You want to find a new substitute."
 
-  2. Retrouver les aliments substitués.
+  2. "You want to see your saved substitutes."
 
-  3. Supprimer un des éléments sauvegardé.
+  3. "You want to delete saved substitutes".
 
-  Si l'utilisateur sélectionne 1. Le programme pose les questions suivantes à l'utilisateur et ce dernier sélectionne les réponses :
-
-    - Sélectionnez la catégorie. [Plusieurs propositions associées à un chiffre. L'utilisateur entre le chiffre correspondant et appuie sur entrée]
-
-    - Sélectionnez l'aliment. [Plusieurs propositions associées à un chiffre. L'utilisateur entre le chiffre correspondant à l'aliment choisi et appuie sur entrée]
-
-    - Le programme propose un substitut, sa description, un magasin où l'acheter (le cas échéant) et un lien vers la page d'Open Food Facts concernant cet aliment.
-
-    - L'utilisateur a alors la possibilité d'enregistrer le résultat dans la base de données.
-
-
-
-
-
-
-++++++++++ comment instaler les fichiers dans requirement.txt et comment le lancer
+If user chose "You want to find a new substitute.", he has to chose first a substitute, then the product he wants to substitute.
+Program gives all possible substitutes.
+Eventually, user chose the substitutes he wants and has the possibility to save it into the database.

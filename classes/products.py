@@ -37,6 +37,7 @@ class Product:
 
     @staticmethod
     def prodFromCat(category):
+        """Get all products from a category."""
         prods = []
         for elem in Db().getProdFromCat(category):
             prods.append(Product.getOneProduct(elem[0]))
@@ -44,4 +45,6 @@ class Product:
 
     @staticmethod
     def allSubstitutes(category, nutritiongrade):
+        """Selects all possible substitute to a product that have same category
+        and better nutriscore."""
         return Db().getSubstitute(category, nutritiongrade)
