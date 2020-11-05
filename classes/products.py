@@ -1,7 +1,10 @@
-from classes.pur_beurre import *
+from classes.pur_beurre import Db
+
 
 class Product:
-    def __init__(self, idbarcode, product_name, description, offlink, store, nutritiongrade):
+    def __init__(
+        self, idbarcode, product_name, description, offlink, store,
+            nutritiongrade):
         self.id_barcode = idbarcode
         self.product_name = product_name
         self.description = description
@@ -32,8 +35,16 @@ class Product:
 
     @staticmethod
     def getOneProduct(barcode):
-        (idbarcode, product_name, description, offlink, store, nutritiongrade) = Db().getProduct(barcode)
-        return idbarcode, product_name, description, offlink, store, nutritiongrade
+        (
+            idbarcode,
+            product_name,
+            description,
+            offlink,
+            store,
+            nutritiongrade,
+        ) = Db().getProduct(barcode)
+        return (idbarcode, product_name, description, offlink, store,
+                nutritiongrade)
 
     @staticmethod
     def prodFromCat(category):

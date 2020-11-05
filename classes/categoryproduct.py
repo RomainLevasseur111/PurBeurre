@@ -1,12 +1,13 @@
-from classes.pur_beurre import *
+from classes.pur_beurre import Db
+
 
 class Categoryproduct:
-    def __init__ (self, categoryname, idbarcode):
-        self.categoryname =  categoryname
+    def __init__(self, categoryname, idbarcode):
+        self.categoryname = categoryname
         self.idbarcode = idbarcode
 
     def toTuple(self):
-        return(
+        return (
             self.categoryname,
             self.idbarcode,
         )

@@ -1,4 +1,5 @@
-from classes.pur_beurre import *
+from classes.pur_beurre import Db
+
 
 class Categories:
     def __init__(self, categoryname):
@@ -9,9 +10,7 @@ class Categories:
 
     def toTuple(self):
         """Changes object parameters into a tuple."""
-        return (
-            self.categoryname,
-        )
+        return (self.categoryname,)
 
     def saveCat(self):
         """Saves object into database using Db class."""
@@ -28,9 +27,8 @@ class Categories:
         """Get all catagories."""
         return Db().getAllCategories()
 
-
     @classmethod
     def getOneCat(self, categoryid):
         """Get one category."""
         (categoryname) = Db().selectCat(categoryid)
-        return (categoryname[0])
+        return categoryname[0]

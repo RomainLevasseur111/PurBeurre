@@ -1,5 +1,19 @@
-from constants import *
+from constants import deletesave
+from constants import selectcat
+from constants import getallcats
+from constants import getallsubs
+from constants import getproductfromcat
+from constants import insertsub
+from constants import insertcatprod
+from constants import insertcat
+from constants import completeproduct
+from constants import insertprod
+from constants import PASSWORD
+from constants import USER
+from constants import HOST
+
 import mysql.connector
+
 
 class Db:
     connection = None
@@ -7,11 +21,10 @@ class Db:
     @classmethod
     def getConnection(cls):
         """Connects to database if not connected."""
-        if cls.connection == None:
-            cls.dbconnect = mysql.connector.connect(host=HOST,
-                                                user=USER,
-                                                password=PASSWORD,
-                                                database='pur_beurre')
+        if cls.connection is None:
+            cls.dbconnect = mysql.connector.connect(
+                host=HOST, user=USER, password=PASSWORD, database="pur_beurre"
+            )
             cls.mycursor = cls.dbconnect.cursor(buffered=True)
             cls.connection = "connected"
         return cls.connection
