@@ -247,5 +247,7 @@ def seeAllSubs():
             "Nutriscore : " + str(Product.getOneProduct(elem[2])[5]) + "\n\n"
         )
     return i
+
+
 if __name__ == "__main__":
     menu()

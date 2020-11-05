@@ -1,5 +1,6 @@
 import mysql.connector
-from constants import NB_CATEGORY, NB_PAGEPRODUCT, cat_link, PASSWORD, USER, HOST
+from constants import (NB_CATEGORY, NB_PAGEPRODUCT, cat_link, PASSWORD, USER,
+                       HOST)
 from classes.categories import Categories
 from classes.products import Product
 from classes.categoryproduct import Categoryproduct
@@ -33,11 +34,11 @@ def requestprod(cat, link):
     while i < NB_PAGEPRODUCT + 1:
         urls.append(link + "/" + str(i))
         i += 1
-    """For each page of a catagory from OpenFoodFacts, takes data of all fields.
-    (id product_name...) Then creates a Product object and save it in
+    """For each page of a catagory from OpenFoodFacts, takes data of all
+    fields.(id product_name...) Then creates a Product object and save it in
     database."""
-    for l in urls:
-        response = requests.request("GET", l + ".json")
+    for locc in urls:
+        response = requests.request("GET", locc + ".json")
         json_prod = response.json()
         products_prod = json_prod.get("products")
         prod_info = [
