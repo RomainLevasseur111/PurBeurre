@@ -1,4 +1,4 @@
-# Openclassroom projet 5
+# Pur Beurre
 ## Utilisation des données publiques d'OpenFoodFacts
 
 La startup Pur Beurre nous demande de créer un programme interagissant avec la base de données d'OpenFoodFacts afin d'en __récupérer les aliments__ et leurs descriptions, et de donner la possibilité aux utilisateurs de lui __trouver un substitut__.
